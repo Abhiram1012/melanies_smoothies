@@ -28,21 +28,19 @@ ingredients_list = st.multiselect(
 
 ingredients_string = ''
 if ingredients_list:
+    ingredients_string = ''
+
     for fruit_chosen in ingredients_list:
-        ingredients_string += f"{fruit_chosen} "  # Add a space after each fruit
+        ingredients_string += fruit_chosen + ''
 
-        search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
-        st.write(f'The search value for {fruit_chosen} is {search_on}.')
+        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+        st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
 
-        st.subheader(f'{fruit_chosen} Nutrition Information')
+        st.subheader(fruit_chosen + 'Nutrition Information')
+        
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" +fruit_chosen)
+        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
-        # Fetch nutrition information from Fruityvice API
-        fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_chosen}")
-        if fruityvice_response.status_code == 200:
-            fv_data = fruityvice_response.json()
-            st.dataframe(pd.json_normalize(fv_data), use_container_width=True)
-        else:
-            st.error(f"Failed to fetch data for {fruit_chosen}. Please try again later.")
 
     # Remove any trailing space from the ingredients_string
     ingredients_string = ingredients_string.strip()
