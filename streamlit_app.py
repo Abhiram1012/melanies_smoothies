@@ -3,8 +3,9 @@ import requests
 from snowflake.snowpark.functions import col
 
 # Establish Snowflake connection
-cnx = st.experimental_connection("snowflake")
-session = cnx.session()
+cnx = st.connection("snowflake")
+session =cnx.session()
+
 
 # Create orders using Streamlit inputs
 if st.button('Create Orders'):
