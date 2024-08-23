@@ -47,10 +47,10 @@ if ingredients_list:
     # Remove any trailing space from the ingredients_string
     ingredients_string = ingredients_string.strip()
 
-    # SQL insert statement with parameterized query
-    my_insert_stmt = """
+    # SQL insert statement with direct string formatting
+    my_insert_stmt = f"""
         INSERT INTO smoothies.public.orders (ingredients, name_on_order)
-        VALUES (%s, %s)
+        VALUES ('{ingredients_string}', '{name_on_order}')
     """
 
     # Display the submit button
@@ -58,8 +58,8 @@ if ingredients_list:
 
     if time_to_insert:
         try:
-            # Execute the insert statement with parameters
-            session.sql(my_insert_stmt, (ingredients_string, name_on_order)).collect()
+            # Execute the insert statement
+            session.sql(my_insert_stmt).collect()
             st.success(f'Your Smoothie is ordered, {name_on_order}!', icon="✅")
         except Exception as e:
             st.error(f"Error placing the order: {e}")
