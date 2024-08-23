@@ -33,7 +33,10 @@ ingredients_list = st.multiselect(
     ,max_selections =5
 )
 
-ingredients_string = ', '.join(ingredients_list)
+
+if ingredients_list:
+    ingredients_string = ', '.join(ingredients_list)  # Format ingredients as a comma-separated string
+
 
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ''
