@@ -19,6 +19,8 @@ st.write('The name on Smoothie will be :', name_on_order)
 
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 #st.dataframe(data=my_dataframe, use_container_width=True)
+pd_df=my_dataframe.to_pandas()
+
 ingredients_list = st.multiselect(
     'Choose upto 5 ingredients :'
     ,my_dataframe
@@ -30,10 +32,14 @@ if ingredients_list:
 
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ''
-        st.subheader(fruit_chosen + 'Nutrition Information')
-        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
-        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
+        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+        st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
+
+        st.subheader(fruit_chosen + 'Nutrition Information')
+        
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" +  + fruit_chosen)
+        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
 
     #st.write(ingredients_string)
